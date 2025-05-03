@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Antrian HIMASI</title>
+    <style>
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background-color: #000;
+            color: #0f0;
+            text-align: center;
+            padding-top: 100px;
+        }
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        #nomor {
+            font-size: 80px;
+            color: #ff0;
+        }
+        #departemen {
+            font-size: 32px;
+            margin-top: 20px;
+            color: #0ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nomor Antrian Dipanggil</h1>
+    <div id="nomor">-</div>
+    <div id="departemen">Departemen: -</div>
+
+    <script>
+        function updateDisplay() {
+            const allDepts = ['psdm', 'dagri', 'sosmas', 'minbak', 'medkominfo', 'agama', 'pendiptek'];
+            let latestDept = '';
+            let latestCall = '';
+            for (const dept of allDepts) {
+                const current = localStorage.getItem(dept + '_current');
+                if (current && current !== '') {
+                    latestDept = dept;
+                    latestCall = current;
+                }
+            }
+            document.getElementById('nomor').textContent = latestCall || '-';
+            document.getElementById('departemen').textContent = latestDept ? 'Departemen: ' + latestDept.toUpperCase() : 'Departemen: -';
+        }
+
+        updateDisplay();
+        setInterval(updateDisplay, 3000);
+    </script>
+</body>
+</html>
