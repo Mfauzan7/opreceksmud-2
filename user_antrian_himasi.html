@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Ambil Antrian HIMASI</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        select, button { margin: 5px 0; padding: 5px 10px; }
+    </style>
+</head>
+<body>
+    <h1>Ambil Nomor Antrian - Eksekutif Muda HIMASI</h1>
+    <label for="departemen-user">Pilih Departemen:</label>
+    <select id="departemen-user">
+        <option value="psdm">PSDM</option>
+        <option value="dagri">DAGRI</option>
+        <option value="sosmas">SOSMAS</option>
+        <option value="minbak">MINBAK</option>
+        <option value="medkominfo">MEDKOMINFO</option>
+        <option value="agama">AGAMA</option>
+        <option value="pendiptek">PENDIPTEK</option>
+    </select>
+    <br>
+    <button onclick="ambilAntrian()">Ambil Nomor</button>
+    <p id="hasil-antrian"></p>
+
+    <script>
+        const prefix = {
+            psdm: 'dp',
+            dagri: 'dd',
+            sosmas: 'ds',
+            minbak: 'dm',
+            medkominfo: 'dk',
+            agama: 'da',
+            pendiptek: 'dpd'
+        };
+
+        function ambilAntrian() {
+            const dept = document.getElementById('departemen-user').value;
+            let counter = parseInt(localStorage.getItem(dept + '_counter') || '1');
+            const kode = prefix[dept] + counter;
+            counter++;
+            localStorage.setItem(dept + '_counter', counter);
+
+            let antrean = JSON.parse(localStorage.getItem(dept + '_queue') || '[]');
+            antrean.push(kode);
+            localStorage.setItem(dept + '_queue', JSON.stringify(antrean));
+
+            document.getElementById('hasil-antrian').textContent = `Nomor Antrian Anda: ${kode}`;
+        }
+    </script>
+</body>
+</html>

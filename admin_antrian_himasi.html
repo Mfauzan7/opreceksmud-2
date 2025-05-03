@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Antrian HIMASI</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        select, button { margin: 5px 0; padding: 5px 10px; }
+    </style>
+</head>
+<body>
+    <h1>Panel Admin - Eksekutif Muda HIMASI</h1>
+    <label for="departemen-admin">Pilih Departemen:</label>
+    <select id="departemen-admin" onchange="tampilkanStatus()">
+        <option value="psdm">PSDM</option>
+        <option value="dagri">DAGRI</option>
+        <option value="sosmas">SOSMAS</option>
+        <option value="minbak">MINBAK</option>
+        <option value="medkominfo">MEDKOMINFO</option>
+        <option value="agama">AGAMA</option>
+        <option value="pendiptek">PENDIPTEK</option>
+    </select>
+    <br>
+    <button onclick="panggilBerikutnya()">Panggil Berikutnya</button>
+    <p>Nomor Dipanggil: <span id="dipanggil">-</span></p>
+    <p>Sisa Antrian: <span id="sisa-antrian">0</span></p>
+
+    <script>
+        function panggilBerikutnya() {
+            const dept = document.getElementById('departemen-admin').value;
+            let antrean = JSON.parse(localStorage.getItem(dept + '_queue') || '[]');
+            const next = antrean.shift();
+            localStorage.setItem(dept + '_queue', JSON.stringify(antrean));
+            localStorage.setItem(dept + '_current', next || '');
+
+            tampilkanStatus();
+        }
+
+        function tampilkanStatus() {
+            const dept = document.getElementById('departemen-admin').value;
+            const current = localStorage.getItem(dept + '_current') || '-';
+            const antrean = JSON.parse(localStorage.getItem(dept + '_queue') || '[]');
+
+            document.getElementById('dipanggil').textContent = current;
+            document.getElementById('sisa-antrian').textContent = antrean.length;
+        }
+
+        tampilkanStatus();
+        setInterval(tampilkanStatus, 3000);
+    </script>
+</body>
+</html>
